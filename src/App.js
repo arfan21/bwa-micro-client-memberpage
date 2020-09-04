@@ -8,6 +8,7 @@ import { NotFound } from "pages/404";
 import MemberRoutes from "components/Routes/MemberRoutes";
 import { MyClass } from "pages/MyClass";
 import { Unauthenticated } from "pages/401";
+import { Register } from "pages/Register";
 
 function App() {
     const history = createBrowserHistory({ basename: process.env.PUBLIC_URL });
@@ -17,6 +18,10 @@ function App() {
             <Router history={history}>
                 <Switch>
                     <GuestRoutes path="/login" component={Login}></GuestRoutes>
+                    <GuestRoutes
+                        path="/register"
+                        component={Register}
+                    ></GuestRoutes>
                     <GuestRoutes
                         path="/private"
                         component={Unauthenticated}

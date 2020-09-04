@@ -6,6 +6,9 @@ import { withRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { populateProfile } from "store/actions/users";
 import useForm from "helpers/hooks/useForm";
+import fieldsErrors from "helpers/fieldsErrors";
+import { useState } from "react";
+import { Input } from "components/form/input";
 
 const LoginForm = ({ history }) => {
     const dispatch = useDispatch();
@@ -14,6 +17,8 @@ const LoginForm = ({ history }) => {
         email: "",
         password: "",
     });
+
+    const [Errors, setErrors] = useState(() => null);
 
     const submit = (e) => {
         e.preventDefault();
@@ -53,12 +58,13 @@ const LoginForm = ({ history }) => {
 
                     history.push(redirect || "/");
                 });
-                console.log(res);
             })
             .catch((err) => {
-                console.log(err);
+                setErrors(err?.response?.data?.message);
             });
     };
+
+    const ERRORS = fieldsErrors(Errors);
 
     return (
         <div className="flex justify-center items-center pb-24">
@@ -68,32 +74,25 @@ const LoginForm = ({ history }) => {
                     Finish Your <span className="font-bold">Goals</span>
                 </h1>
                 <form onSubmit={submit}>
-                    <div className="flex flex-col mb-4">
-                        <label htmlFor="email" className="text-lg mb-2">
-                            Email Address
-                        </label>
-                        <input
-                            name="email"
-                            type="email"
-                            className="bg-white focus:outline-none border px-6 py-3 w-1/2 border-gray-600 focus:border-teal-500 w-full"
-                            placeholder="your email address"
-                            value={email}
-                            onChange={setState}
-                        />
-                    </div>
-                    <div className="flex flex-col mb-4">
-                        <label htmlFor="password" className="text-lg mb-2">
-                            Password
-                        </label>
-                        <input
-                            name="password"
-                            type="password"
-                            className="bg-white focus:outline-none border px-6 py-3 w-1/2 border-gray-600 focus:border-teal-500 w-full"
-                            placeholder="your password"
-                            value={password}
-                            onChange={setState}
-                        />
-                    </div>
+                    <Input
+                        errors={ERRORS?.email?.message}
+                        inputType="email"
+                        labelName="Email Address"
+                        name="email"
+                        placeholder="Your Email Address"
+                        onChange={setState}
+                        value={email}
+                    ></Input>
+
+                    <Input
+                        errors={ERRORS?.password?.message}
+                        inputType="password"
+                        labelName="Password"
+                        name="password"
+                        placeholder="Your Password"
+                        onChange={setState}
+                        value={password}
+                    ></Input>
 
                     <button
                         type="submit"
