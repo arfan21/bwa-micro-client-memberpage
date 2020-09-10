@@ -10,9 +10,7 @@ function Header({ onLight, location }) {
     const linkColor = onLight ? "text-gray-900" : "text-white";
 
     const linkCTA =
-        location.pathname.indexOf("/login") > -1
-            ? `${process.env.NEXT_PUBLIC_MEMBERPAGE_URL}/register`
-            : `${process.env.NEXT_PUBLIC_MEMBERPAGE_URL}/login`;
+        location.pathname.indexOf("/login") > -1 ? `/register` : `/login`;
 
     const textCTA =
         location.pathname.indexOf("/login") > -1 ? "Daftar" : "Masuk";
@@ -24,58 +22,56 @@ function Header({ onLight, location }) {
             </div>
             <ul className="flex">
                 <li>
-                    <Link
-                        to="/"
+                    <a
+                        href={process.env.REACT_APP_FRONTPAGE_URL}
                         className={[
                             linkColor,
                             "text-white hover:text-teal-500 text-lg px-6 py-3 font-medium",
                         ].join(" ")}
                     >
                         Home
-                    </Link>
+                    </a>
                 </li>
                 <li>
-                    <Link
-                        to="/"
+                    <a
+                        href={process.env.REACT_APP_FRONTPAGE_URL}
                         className={[
                             linkColor,
                             "text-white hover:text-teal-500 text-lg px-6 py-3 font-medium",
                         ].join(" ")}
                     >
                         Pricing
-                    </Link>
+                    </a>
                 </li>
                 <li>
-                    <Link
-                        to="/"
+                    <a
+                        href={process.env.REACT_APP_FRONTPAGE_URL}
                         className={[
                             linkColor,
                             "text-white hover:text-teal-500 text-lg px-6 py-3 font-medium",
                         ].join(" ")}
                     >
                         Features
-                    </Link>
+                    </a>
                 </li>
                 <li>
-                    <Link
-                        to="/"
+                    <a
+                        href={process.env.REACT_APP_FRONTPAGE_URL}
                         className={[
                             linkColor,
                             "text-white hover:text-teal-500 text-lg px-6 py-3 font-medium",
                         ].join(" ")}
                     >
                         Story
-                    </Link>
+                    </a>
                 </li>
                 <li>
-                    <a
-                        target="_black"
-                        rel="noopener noreferrer"
-                        href={linkCTA}
+                    <Link
+                        to={linkCTA}
                         className="bg-indigo-700 hover:bg-indigo-800 transition-all duration-200 text-white hover:text-teal-500 text-lg px-6 py-3 font-medium ml-6"
                     >
                         {textCTA}
-                    </a>
+                    </Link>
                 </li>
             </ul>
         </header>

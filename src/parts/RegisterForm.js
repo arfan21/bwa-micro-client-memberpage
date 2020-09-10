@@ -13,7 +13,6 @@ const RegisterForm = ({ history }) => {
     const [
         { name, email, password, profession, otherProfession },
         setState,
-        newState,
     ] = useForm({
         name: "",
         email: "",

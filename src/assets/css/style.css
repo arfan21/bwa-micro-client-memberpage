@@ -14617,6 +14617,51 @@ svg#svg-star {
   background-color: rgba(232, 240, 250, var(--bg-opacity));
 }
 
+.sidebar-class-list {
+  overflow-y: hidden;
+}
+
+.sidebar-class-list:hover {
+  overflow-y: auto;
+}
+
+.sidebar-class-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+
+.sidebar-class-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+
+.sidebar-class-list::-webkit-scrollbar-thumb:vertical {
+  background: #888;
+  border-right: none;
+  border-left: none;
+}
+
+/* Handle on hover */
+
+.sidebar-class-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.sidebar-class-list::-webkit-scrollbar-track-piece:end {
+  --bg-opacity: 1;
+  background-color: #161A4F;
+  background-color: rgba(22, 26, 79, var(--bg-opacity));
+}
+
+.sidebar-class-list::-webkit-scrollbar-track-piece:start {
+  --bg-opacity: 1;
+  background-color: #161A4F;
+  background-color: rgba(22, 26, 79, var(--bg-opacity));
+  margin-top: 80px;
+}
+
 @media (min-width: 640px){
   .sm\:space-y-0 > :not(template) ~ :not(template){
     --space-y-reverse: 0;

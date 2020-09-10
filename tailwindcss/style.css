@@ -258,3 +258,41 @@ svg#svg-star {
     z-index: 1;
     @apply .bg-gray-200;
 }
+
+.sidebar-class-list {
+    @apply .overflow-y-hidden;
+}
+
+.sidebar-class-list:hover {
+    @apply .overflow-y-auto;
+}
+
+.sidebar-class-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+.sidebar-class-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+.sidebar-class-list::-webkit-scrollbar-thumb:vertical {
+    background: #888;
+    border-right: none;
+    border-left: none;
+}
+
+/* Handle on hover */
+.sidebar-class-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.sidebar-class-list::-webkit-scrollbar-track-piece:end {
+    @apply .bg-indigo-1000;
+}
+
+.sidebar-class-list::-webkit-scrollbar-track-piece:start {
+    @apply .bg-indigo-1000;
+    margin-top: 80px;
+}
