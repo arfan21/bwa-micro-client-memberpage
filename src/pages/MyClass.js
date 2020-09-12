@@ -10,7 +10,7 @@ import {
 } from "store/actions/courses";
 import courses from "constants/api/courses";
 import { ListClassItem } from "parts/ListClassItem";
-import { Loading } from "parts/Loading";
+import { LoadingMyClass } from "parts/LoadingMyClass";
 
 export const MyClass = () => {
     const dispatch = useDispatch();
@@ -18,9 +18,10 @@ export const MyClass = () => {
 
     useEffect(() => {
         window.scroll(0, 0);
-        document.title = "MICRO | My Class";
+        document.title = "My Class | MICRO";
 
         dispatch(statusCourses("loading"));
+
         courses
             .mine()
             .then((res) => {
@@ -39,7 +40,9 @@ export const MyClass = () => {
             <Sidebar></Sidebar>
             <main className="flex-1">
                 <div className="px-16">
-                    {COURSES?.status === "loading" && <Loading></Loading>}
+                    {COURSES?.status === "loading" && (
+                        <LoadingMyClass></LoadingMyClass>
+                    )}
                     {COURSES?.status === "error" && COURSES.message}
                     {COURSES?.status === "ok" &&
                         (COURSES.total > 0 ? (

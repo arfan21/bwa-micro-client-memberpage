@@ -3,6 +3,7 @@ import React from "react";
 import { ReactComponent as DefaultUser } from "assets/images/default-avatar.svg";
 import { useSelector } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
+import users from "constants/api/users";
 
 const Sidebar = ({ match, history }) => {
     const getNavLinkClass = (path) => {
@@ -12,10 +13,12 @@ const Sidebar = ({ match, history }) => {
     };
 
     const logout = () => {
-        history.push("/login");
-        localStorage.removeItem("MICRO:token");
-        document.cookie =
-            "MICRO:user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        users.logout().then((res) => {
+            localStorage.removeItem("MICRO:token");
+            document.cookie =
+                "MICRO:user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            history.push("/login");
+        });
     };
 
     const user = useSelector((state) => state.users);
@@ -29,18 +32,15 @@ const Sidebar = ({ match, history }) => {
                 style={{ width: 280 }}
             >
                 <div className="flex flex-col text-center mt-8">
-                    <div className="border border-indigo-500 mx-auto p-2 inline-flex rounded-full overflow-hidden mb-3">
+                    <div className="border border-indigo-500 mx-auto  inline-flex rounded-full overflow-hidden ">
                         {user?.avatar ? (
                             <img
                                 src={user?.avatar}
                                 alt={user?.name}
-                                style={{ width: 90, height: 90 }}
+                                className="object-cover w-24 h-24"
                             />
                         ) : (
-                            <DefaultUser
-                                className="fill-indigo-500"
-                                style={{ width: 90, height: 90 }}
-                            ></DefaultUser>
+                            <DefaultUser className="fill-indigo-500  w-24 h-24"></DefaultUser>
                         )}
                     </div>
                     <h6 className="text-white text-xl">

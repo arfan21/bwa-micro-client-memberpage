@@ -65,6 +65,7 @@ const LoginForm = ({ history }) => {
     };
 
     const ERRORS = fieldsErrors(Errors);
+    console.log(ERRORS);
 
     return (
         <div className="flex justify-center items-center pb-24">
