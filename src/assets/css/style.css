@@ -1732,7 +1732,6 @@ video {
 
 .appearance-none{
   -webkit-appearance: none;
-     -moz-appearance: none;
           appearance: none;
 }
 
@@ -15787,7 +15786,6 @@ svg#svg-star {
 
   .sm\:appearance-none{
     -webkit-appearance: none;
-       -moz-appearance: none;
             appearance: none;
   }
 
@@ -29475,7 +29473,6 @@ svg#svg-star {
 
   .md\:appearance-none{
     -webkit-appearance: none;
-       -moz-appearance: none;
             appearance: none;
   }
 
@@ -43163,7 +43160,6 @@ svg#svg-star {
 
   .lg\:appearance-none{
     -webkit-appearance: none;
-       -moz-appearance: none;
             appearance: none;
   }
 
@@ -56851,7 +56847,6 @@ svg#svg-star {
 
   .xl\:appearance-none{
     -webkit-appearance: none;
-       -moz-appearance: none;
             appearance: none;
   }
 

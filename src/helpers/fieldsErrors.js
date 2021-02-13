@@ -6,5 +6,6 @@ export default (Errors) => {
 
             return listErrors;
         }, {});
+
     return fieldsError;
 };

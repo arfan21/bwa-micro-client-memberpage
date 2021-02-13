@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import users from "constants/api/users";
 
 import { withRouter } from "react-router-dom";
@@ -8,20 +8,56 @@ import { useState } from "react";
 import { Select } from "components/form/select";
 import fieldsErrors from "helpers/fieldsErrors";
 import { Input } from "components/form/input";
+import Validator from "fastest-validator";
 
 const RegisterForm = ({ history }) => {
+    const v = new Validator();
+
+    const schemeName = { name: "string|empty:false" };
+    const schemeEmail = { email: "email|empty:false" };
+    const schemePassword = { password: "string|min:6" };
+    const schemeConfirmPassword = {
+        password: "string|min:6",
+        confirmPassword: "equal|field:password",
+    };
+
+    const checkName = v.compile(schemeName);
+    const checkEmail = v.compile(schemeEmail);
+    const checkPassword = v.compile(schemePassword);
+    const checkConfirmPassword = v.compile(schemeConfirmPassword);
+
     const [
-        { name, email, password, profession, otherProfession },
+        { name, email, password, confirmPassword, profession, otherProfession },
         setState,
     ] = useForm({
         name: "",
         email: "",
         password: "",
+        confirmPassword: "",
         profession: "",
         otherProfession: "",
     });
 
     const [Errors, setErrors] = useState(() => null);
+    const [isDisabled, setIsDisabled] = useState(() => true);
+    const [emailIsExist, setEmailIsExist] = useState(() => false);
+
+    const checkIsDisabled = () => {
+        if (
+            !checkName({ name }).length &&
+            !checkEmail({ email }).length &&
+            !checkPassword({ password }).length &&
+            !checkConfirmPassword({ password, confirmPassword }).length
+        ) {
+            return setIsDisabled(false);
+        }
+
+        return setIsDisabled(true);
+    };
+
+    useEffect(() => {
+        checkIsDisabled();
+    });
 
     const submit = (e) => {
         e.preventDefault();
@@ -38,6 +74,10 @@ const RegisterForm = ({ history }) => {
                 history.push("/login");
             })
             .catch((err) => {
+                if (err?.response?.status === 409) {
+                    setEmailIsExist(true);
+                }
+
                 setErrors(err?.response?.data?.message);
             });
     };
@@ -53,7 +93,11 @@ const RegisterForm = ({ history }) => {
                 </h1>
                 <form onSubmit={submit}>
                     <Input
-                        errors={ERRORS?.name?.message}
+                        errors={
+                            ERRORS?.name?.message ?? name
+                                ? checkName({ name })?.[0]?.message
+                                : ""
+                        }
                         inputType="text"
                         labelName="Full Name"
                         name="name"
@@ -63,23 +107,57 @@ const RegisterForm = ({ history }) => {
                     ></Input>
 
                     <Input
-                        errors={ERRORS?.email?.message}
+                        errors={
+                            ERRORS?.email?.message
+                                ? ERRORS?.email?.message
+                                : emailIsExist
+                                ? "email already exist"
+                                : email
+                                ? checkEmail({ email })?.[0]?.message
+                                : ""
+                        }
                         inputType="email"
                         labelName="Email Address"
                         name="email"
                         placeholder="Your Email Address"
-                        onChange={setState}
+                        onChange={(e) => {
+                            setState(e);
+                            setEmailIsExist(false);
+                        }}
                         value={email}
                     ></Input>
 
                     <Input
-                        errors={ERRORS?.password?.message}
+                        errors={
+                            ERRORS?.password?.message ?? password
+                                ? checkPassword({
+                                      password,
+                                  })?.[0]?.message
+                                : ""
+                        }
                         inputType="password"
                         labelName="Password"
                         name="password"
                         placeholder="Your Password"
                         onChange={setState}
                         value={password}
+                    ></Input>
+
+                    <Input
+                        errors={
+                            password
+                                ? checkConfirmPassword({
+                                      password,
+                                      confirmPassword,
+                                  })?.[0]?.message
+                                : ""
+                        }
+                        inputType="password"
+                        labelName="Confirm Password"
+                        name="confirmPassword"
+                        placeholder="Confirm Your Password"
+                        onChange={setState}
+                        value={confirmPassword}
                     ></Input>
 
                     <div className="flex flex-col mb-4">
@@ -116,7 +194,11 @@ const RegisterForm = ({ history }) => {
 
                     <button
                         type="submit"
-                        className="bg-orange-500 hover:bg-orange-400 transition-all duration-200 focus:outline-none shadow-inner text-white px-6 py-3 mt-4 w-full"
+                        className={[
+                            "hover:bg-orange-400 transition-all duration-200 focus:outline-none shadow-inner text-white px-6 py-3 mt-4 w-full",
+                            isDisabled ? "bg-orange-400" : "bg-orange-500",
+                        ].join(" ")}
+                        disabled={isDisabled}
                     >
                         Register
                     </button>

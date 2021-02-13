@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { createBrowserHistory } from "history";
+
 //redux
 import { useDispatch } from "react-redux";
 import { populateProfile } from "store/actions/users";
@@ -23,11 +23,12 @@ import { Joined } from "pages/Joined";
 import { DetailsClass } from "pages/DetailsClass";
 import { Settings } from "pages/Settings";
 import { Transactions } from "pages/Transactions";
+import history from "utils/history";
+import { Dashboard } from "pages/Dashboard";
+import AdminRoutes from "components/Routes/AdminRoutes";
 
 function App() {
     const dispatch = useDispatch();
-
-    const history = createBrowserHistory({ basename: process.env.PUBLIC_URL });
 
     useEffect(() => {
         let session = null;
@@ -38,7 +39,7 @@ function App() {
             setAuthorizationHeader(session.token);
 
             users.details().then((res) => {
-                dispatch(populateProfile(res.data));
+                dispatch(populateProfile(res?.data));
             });
         }
     }, [dispatch]);
@@ -85,6 +86,10 @@ function App() {
                         path="/transactions"
                         component={Transactions}
                     ></MemberRoutes>
+                    <AdminRoutes
+                        path="/dashboard"
+                        component={Dashboard}
+                    ></AdminRoutes>
 
                     <Route path="*" component={NotFound}></Route>
                 </Switch>

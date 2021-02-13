@@ -22,6 +22,7 @@ const Sidebar = ({ match, history }) => {
     };
 
     const user = useSelector((state) => state.users);
+
     return (
         <aside
             className="bg-indigo-1000 max-h-screen h-screen overflow-y-auto"
@@ -98,6 +99,19 @@ const Sidebar = ({ match, history }) => {
                             Settings
                         </Link>
                     </li>
+                    {user?.role === "admin" && (
+                        <li>
+                            <Link
+                                className={[
+                                    "nav-link relative flex items-center py-3 px-5 transition-all duration-200 hover:text-white active:text-white focus:outline-none w-full text-left",
+                                    getNavLinkClass("/dashboard"),
+                                ].join(" ")}
+                                to="/dashboard"
+                            >
+                                Admin Dashboard
+                            </Link>
+                        </li>
+                    )}
                 </ul>
                 <div className="my-auto"></div>
                 <ul className="main-menu mt-12">

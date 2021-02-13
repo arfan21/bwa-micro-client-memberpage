@@ -25,10 +25,9 @@ export const MyClass = () => {
         courses
             .mine()
             .then((res) => {
-                dispatch(fetchCourses(res.data));
+                dispatch(fetchCourses(res?.data));
             })
             .catch((err) => {
-                console.log(err);
                 dispatch(
                     messageCourse(err?.response?.data?.message ?? "error")
                 );

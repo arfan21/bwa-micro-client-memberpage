@@ -1,7 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Route, Redirect, withRouter } from "react-router-dom";
 
-const MemberRoute = ({
+const AdminRoutes = ({
     component: Component,
     match,
     path,
@@ -9,23 +10,20 @@ const MemberRoute = ({
     ...rest
 }) => {
     const ok = localStorage.getItem("MICRO:token");
-
-    localStorage.removeItem("MICRO:redirect");
+    const user = useSelector((state) => state.users);
 
     return (
         <Route
             {...rest}
             render={(props) =>
-                ok ? (
+                ok && user?.role === "admin" ? (
                     <Component {...props} />
-                ) : path === "/joined/:class" ? (
-                    <Redirect to={`/login?path=${location.pathname}`} />
                 ) : (
-                    <Redirect to={`/private?path=${location.pathname}`} />
+                    <Redirect to={`/*`} />
                 )
             }
         />
     );
 };
 
-export default withRouter(MemberRoute);
+export default withRouter(AdminRoutes);
