@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 import { useEffect } from "react";
 import courses from "constants/api/courses";
 import { Loading } from "parts/Loading";
 import { ServerError } from "./500";
+import { Link } from "react-router-dom";
 
 export const Joined = ({ history, match }) => {
     const [state, setState] = useState(() => ({
@@ -12,40 +13,27 @@ export const Joined = ({ history, match }) => {
         data: {},
     }));
 
-    console.log(match);
+    const joining = useCallback(async () => {
+        try {
+            const details = await courses.detail(match.params.class);
+            const joined = await courses.join(match.params.class);
+
+            if (joined.data.snap_url) window.location = joined.data.snap_url;
+            else setState({ isLoading: false, isError: false, data: details });
+        } catch (error) {
+            if (error?.response?.data?.message === "user already taken")
+                history.push(`/courses/${match.params.class}`);
+            setState({ isLoading: false, isError: true, data: null });
+        }
+    }, [match.params.class]);
 
     useEffect(() => {
-        courses.join(match.params.class);
-
-        courses
-            .detail(match.params.class)
-            .then((res) =>
-                setState({ isLoading: false, isError: false, data: res })
-            )
-            .catch((err) =>
-                setState({ isLoading: false, isError: true, data: null })
-            );
-    }, [match.params.class]);
+        joining();
+    }, [joining]);
 
     if (state.isLoading) return <Loading></Loading>;
     if (state.isError) return <ServerError></ServerError>;
 
-    const joining = () => {
-        history.push(`/courses/${match.params.class}`);
-        // courses
-        //     .join(match.params.class)
-        //     .then((res) => {
-        //         history.push(`/courses/${match.params.class}`);
-        //     })
-        //     .catch((err) => {
-        //         if (
-        //             err?.response?.data?.message ===
-        //             "user already take this course"
-        //         ) {
-        //             history.push(`/courses/${match.params.class}`);
-        //         }
-        //     });
-    };
     return (
         <section className="h-screen flex flex-col items-center">
             <img
@@ -58,12 +46,12 @@ export const Joined = ({ history, match }) => {
                 <strong>{state?.data?.name ?? "Class Name"}</strong> class
             </p>
 
-            <span
-                onClick={joining}
+            <Link
+                to={`/courses/${match.params.class}`}
                 className="cursor-pointer bg-orange-500 hover:bg-orange-400 transition-all duration-200 focus:outline-none shadow-inner text-white px-6 py-3 mt-4 "
             >
                 Start learn
-            </span>
+            </Link>
         </section>
     );
 };
